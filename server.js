@@ -6,41 +6,36 @@ mongoose
     .catch(error => console.log(error));
 
 // Schema
-const roomSchemaObject = {
-    name: String,
-    price: {
-        type: Number,
-        required: [true, "價格必填"]
-    },
-    rating: Number,
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
-}
 const roomSchema = new mongoose.Schema(
-    roomSchemaObject,
+    {
+        name: String,
+        price: {
+            type: Number,
+            required: [true, "價格必填"]
+        },
+        rating: Number,
+        createdAt: {
+            type: Date,
+            default: Date.now,
+        },
+        idCardNo: {
+            type: String,
+            select: false
+        }
+    },
     { versionKey: false }
 )
 
 // Model
 const Room = mongoose.model('Room', roomSchema);
-// Entity
-const testRoom = new Room({
-    name: '豪華單人房',
-    price: 2000,
-    rating: 4.5
-})
 
-testRoom.save()
-    .then(() => console.log('資料新增成功'))
-    .catch(error =>
-        Object.keys(error.errors).forEach(filed =>
-            error.errors[filed].properties ?
-                console.log(error.errors[filed].properties.message) :
-                console.log(`Required type: ${error.errors[filed].kind}. Value type: ${error.errors[filed].valueType}.`)
-        )
-    );
+Room.create({
+    name: "豪華雙人房",
+    price: 2500,
+    rating: 4.5,
+    idCardNo: "4345344564"
+}).then(res => console.log(res, "新增成功")
+).catch(err => console.log(err));
 
 const requestListener = async (req, res) => {
     res.end();
