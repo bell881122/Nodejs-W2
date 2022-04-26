@@ -29,29 +29,63 @@ const roomSchema = new mongoose.Schema(
 // Model
 const Room = mongoose.model('Room', roomSchema);
 
-Room.create({
-    name: "豪華雙人房",
-    price: 2500,
-    rating: 4.5,
-    idCardNo: "4345344564"
-}).then(res => console.log(res, "新增成功")
-).catch(err => console.log(err));
+const requestListener = async (req, res) => {
+    let body = "";
+    req.on("data", chunk => body += chunk);
 
-const requestListener = async (req,res)=>{
     const headers = {
         'Access-Control-Allow-Headers': 'Content-Type, Authorization, Content-Length, X-Requested-With',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'PATCH, POST, GET,OPTIONS,DELETE',
         'Content-Type': 'application/json'
     }
-    if(req.url=="/rooms" && req.method=="GET"){
+
+    const showRooms = async () => {
         const rooms = await Room.find();
-        res.writeHead(200,headers);
+        res.writeHead(200, headers);
         res.write(JSON.stringify({
-            "status":"success",
+            "status": "success",
             rooms
         }))
-        res.end()
+        res.end();
+    }
+
+    const handleError = err => {
+        console.log(err);
+        let error;
+        [...Object.keys(err.errors)].forEach(el =>
+            error = err.errors[el].properties?.message ?
+                { ...error, [el]: err.errors[el].properties.message } :
+                { ...error, [el]: err.errors[el].message }
+        );
+        res.writeHead(400, headers);
+        res.write(JSON.stringify({
+            "status": "false",
+            error
+        }))
+        res.end();
+    }
+    if (req.url == "/rooms" && req.method == "GET") {
+        showRooms();
+    } else if (req.url == "/rooms" && req.method == "POST") {
+        req.on('end', async () => {
+            try {
+                const data = JSON.parse(body);
+                Room.create({
+                    name: data.name,
+                    price: data.price,
+                    rating: data.rating,
+                    idCardNo: data.idCardNo
+                }).then(async (result) => {
+                    console.log(result, "新增成功")
+                    showRooms();
+                }).catch(error => {
+                    handleError(error)
+                });
+            } catch (error) {
+                handleError(error);
+            }
+        })
     }
 }
 
