@@ -89,6 +89,10 @@ const requestListener = async (req, res) => {
     } else if (req.url == "/rooms" && req.method == "DELETE") {
         await Room.deleteMany({});
         showRooms();
+    } else if (req.url.startsWith("/rooms/") && req.method == "DELETE") {
+        const id = req.url.split("/").pop();
+        await Room.findByIdAndDelete(id);
+        showRooms();
     }
 }
 
