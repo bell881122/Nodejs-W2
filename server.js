@@ -65,6 +65,9 @@ const requestListener = async (req, res) => {
         }))
         res.end();
     }
+
+    const getId = path => path.split("/").pop();
+
     if (req.url == "/rooms" && req.method == "GET") {
         showRooms();
     } else if (req.url == "/rooms" && req.method == "POST") {
@@ -90,9 +93,25 @@ const requestListener = async (req, res) => {
         await Room.deleteMany({});
         showRooms();
     } else if (req.url.startsWith("/rooms/") && req.method == "DELETE") {
-        const id = req.url.split("/").pop();
+        const id = getId(req.url);
         await Room.findByIdAndDelete(id);
         showRooms();
+    } else if (req.url.startsWith("/rooms/") && req.method === "PATCH") {
+        req.on('end', async () => {
+            try {
+                const id = getId(req.url);
+                const data = JSON.parse(body);
+                let newData;
+                [...Object.keys(data)].forEach(field => {
+                    if (["name", "price", "rating", "idCardNo"].indexOf(field) > -1)
+                        newData = { ...newData, [field]: data[field] }
+                })
+                await Room.findByIdAndUpdate(id, newData);
+                showRooms();
+            } catch (error) {
+                handleError(error);
+            }
+        })
     }
 }
 
