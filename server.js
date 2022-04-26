@@ -6,7 +6,7 @@ mongoose
     .catch(error => console.log(error));
 
 // Schema
-const roomSchema = {
+const roomSchemaObject = {
     name: String,
     price: {
         type: Number,
@@ -14,6 +14,11 @@ const roomSchema = {
     },
     rating: Number
 }
+const roomSchema = new mongoose.Schema(
+    roomSchemaObject,
+    { versionKey: false }
+)
+
 // Model
 const Room = mongoose.model('Room', roomSchema);
 // Entity
