@@ -16,6 +16,16 @@ const roomSchema = {
 }
 // Model
 const Room = mongoose.model('Room', roomSchema);
+// Entity
+const testRoom = new Room({
+    name: '豪華單人房',
+    price: 2000,
+    rating: 4.5
+})
+
+testRoom.save()
+    .then(() => console.log('資料新增成功'))
+    .catch(err => console.log(err.errors));
 
 const requestListener = async (req, res) => {
     res.end();
