@@ -12,7 +12,11 @@ const roomSchemaObject = {
         type: Number,
         required: [true, "價格必填"]
     },
-    rating: Number
+    rating: Number,
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
 }
 const roomSchema = new mongoose.Schema(
     roomSchemaObject,
