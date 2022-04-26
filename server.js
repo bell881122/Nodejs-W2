@@ -1,7 +1,15 @@
 const http = require('http');
+const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+
+dotenv.config({ path: "./.env" })
+let url = process.env.DATABASE;
+const dbName = "hotel";
+url = url.replace("<password>", process.env.DATABASE_PASSWORD)
+url = url.replace("<dbName>", dbName)
+
 mongoose
-    .connect("mongodb://localhost:27017/test")
+    .connect(url)
     .then(() => console.log('資料庫連接成功'))
     .catch(error => console.log(error));
 
@@ -116,4 +124,4 @@ const requestListener = async (req, res) => {
 }
 
 const server = http.createServer(requestListener);
-server.listen(3000);
+server.listen(process.env.PORT | 3000);
