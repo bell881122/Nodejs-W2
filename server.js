@@ -25,7 +25,13 @@ const testRoom = new Room({
 
 testRoom.save()
     .then(() => console.log('資料新增成功'))
-    .catch(err => console.log(err.errors));
+    .catch(error =>
+        Object.keys(error.errors).forEach(filed =>
+            error.errors[filed].properties ?
+                console.log(error.errors[filed].properties.message) :
+                console.log(`Required type: ${error.errors[filed].kind}. Value type: ${error.errors[filed].valueType}.`)
+        )
+    );
 
 const requestListener = async (req, res) => {
     res.end();
