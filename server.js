@@ -86,6 +86,9 @@ const requestListener = async (req, res) => {
                 handleError(error);
             }
         })
+    } else if (req.url == "/rooms" && req.method == "DELETE") {
+        await Room.deleteMany({});
+        showRooms();
     }
 }
 
