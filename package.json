@@ -1,0 +1,13 @@
+{
+  "name": "W2_mongoose",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Emi <emi_chang@lhwlfw.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "mongoose": "^6.3.1"
+  }
+}
