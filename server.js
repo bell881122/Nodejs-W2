@@ -37,6 +37,8 @@ Room.create({
 }).then(res => console.log(res, "新增成功")
 ).catch(err => console.log(err));
 
+(async () => await Room.find())().then(res => console.log(res));
+
 const requestListener = async (req, res) => {
     res.end();
 }
