@@ -120,6 +120,13 @@ const requestListener = async (req, res) => {
                 handleError(error);
             }
         })
+    } else {
+        res.writeHead(404, headers);
+        res.write(JSON.stringify({
+            "status": "false",
+            "message": "無此網站路由"
+        }))
+        res.end();
     }
 }
 
