@@ -1,0 +1,167 @@
+{
+	"info": {
+		"_postman_id": "87282297-31a7-490c-a859-e5665d62727e",
+		"name": "Posts-HEROKU",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "新增項目",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"測試人員\",\r\n    \"tags\":\"興趣\",\r\n    \"type\":\"group\",\r\n    \"content\":\"測試內容\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://powerful-eyrie-30875.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"powerful-eyrie-30875",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "取得全部",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://powerful-eyrie-30875.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"powerful-eyrie-30875",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OPTIONS",
+			"request": {
+				"method": "OPTIONS",
+				"header": [],
+				"url": {
+					"raw": "https://powerful-eyrie-30875.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"powerful-eyrie-30875",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "刪除全部",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"title\":\"ssa\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://powerful-eyrie-30875.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"powerful-eyrie-30875",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "刪除: id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"title\":\"ssa\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://powerful-eyrie-30875.herokuapp.com/posts/ID",
+					"protocol": "https",
+					"host": [
+						"powerful-eyrie-30875",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts",
+						"ID"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "編輯: id",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"content\":\"測試測試測試測試\", \"tags\":[\"唱歌\",\"跳舞\"]}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://powerful-eyrie-30875.herokuapp.com/posts/ID",
+					"protocol": "https",
+					"host": [
+						"powerful-eyrie-30875",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts",
+						"ID"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
