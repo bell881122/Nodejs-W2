@@ -5,7 +5,11 @@
   "author": "Emi <emi_chang@lhwlfw.com>",
   "license": "MIT",
   "scripts": {
+    "start": "node server.js",
     "dev": "nodemon server.js"
+  },
+  "engines": {
+    "node": "v16.x"
   },
   "dependencies": {
     "dotenv": "^16.0.0",
