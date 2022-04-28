@@ -1,10 +1,11 @@
 const http = require('http');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const Post = require('./models/post');
 
 dotenv.config({ path: "./.env" })
 let url = process.env.DATABASE;
-const dbName = "hotel";
+const dbName = "metaWall-test";
 url = url.replace("<password>", process.env.DATABASE_PASSWORD)
 url = url.replace("<dbName>", dbName)
 
@@ -12,30 +13,6 @@ mongoose
     .connect(url)
     .then(() => console.log('資料庫連接成功'))
     .catch(error => console.log(error));
-
-// Schema
-const roomSchema = new mongoose.Schema(
-    {
-        name: String,
-        price: {
-            type: Number,
-            required: [true, "價格必填"]
-        },
-        rating: Number,
-        createdAt: {
-            type: Date,
-            default: Date.now,
-        },
-        idCardNo: {
-            type: String,
-            select: false
-        }
-    },
-    { versionKey: false }
-)
-
-// Model
-const Room = mongoose.model('Room', roomSchema);
 
 const requestListener = async (req, res) => {
     let body = "";
@@ -48,12 +25,12 @@ const requestListener = async (req, res) => {
         'Content-Type': 'application/json'
     }
 
-    const showRooms = async () => {
-        const rooms = await Room.find();
+    const showPosts = async () => {
+        const posts = await Post.find();
         res.writeHead(200, headers);
         res.write(JSON.stringify({
             "status": "success",
-            rooms
+            posts
         }))
         res.end();
     }
@@ -76,20 +53,20 @@ const requestListener = async (req, res) => {
 
     const getId = path => path.split("/").pop();
 
-    if (req.url == "/rooms" && req.method == "GET") {
-        showRooms();
-    } else if (req.url == "/rooms" && req.method == "POST") {
+    if (req.url == "/posts" && req.method == "GET") {
+        showPosts();
+    } else if (req.url == "/posts" && req.method == "POST") {
         req.on('end', async () => {
             try {
                 const data = JSON.parse(body);
-                Room.create({
+                Post.create({
                     name: data.name,
                     price: data.price,
                     rating: data.rating,
                     idCardNo: data.idCardNo
                 }).then(async (result) => {
                     console.log(result, "新增成功")
-                    showRooms();
+                    showPosts();
                 }).catch(error => {
                     handleError(error)
                 });
@@ -97,14 +74,14 @@ const requestListener = async (req, res) => {
                 handleError(error);
             }
         })
-    } else if (req.url == "/rooms" && req.method == "DELETE") {
-        await Room.deleteMany({});
-        showRooms();
-    } else if (req.url.startsWith("/rooms/") && req.method == "DELETE") {
+    } else if (req.url == "/posts" && req.method == "DELETE") {
+        await Post.deleteMany({});
+        showPosts();
+    } else if (req.url.startsWith("/posts/") && req.method == "DELETE") {
         const id = getId(req.url);
-        await Room.findByIdAndDelete(id);
-        showRooms();
-    } else if (req.url.startsWith("/rooms/") && req.method === "PATCH") {
+        await Post.findByIdAndDelete(id);
+        showPosts();
+    } else if (req.url.startsWith("/posts/") && req.method === "PATCH") {
         req.on('end', async () => {
             try {
                 const id = getId(req.url);
@@ -114,8 +91,8 @@ const requestListener = async (req, res) => {
                     if (["name", "price", "rating", "idCardNo"].indexOf(field) > -1)
                         newData = { ...newData, [field]: data[field] }
                 })
-                await Room.findByIdAndUpdate(id, newData);
-                showRooms();
+                await Post.findByIdAndUpdate(id, newData);
+                showPosts();
             } catch (error) {
                 handleError(error);
             }
