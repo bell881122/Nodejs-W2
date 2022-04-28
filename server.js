@@ -53,23 +53,27 @@ const requestListener = async (req, res) => {
 
     const getId = path => path.split("/").pop();
 
+    const handleParam = () => {
+        const data = JSON.parse(body);
+        let newData;
+        [...Object.keys(data)].forEach(field => {
+            newData = { ...newData, [field]: data[field] }
+        })
+        return newData;
+    }
+
     if (req.url == "/posts" && req.method == "GET") {
         showPosts();
     } else if (req.url == "/posts" && req.method == "POST") {
         req.on('end', async () => {
             try {
-                const data = JSON.parse(body);
-                Post.create({
-                    name: data.name,
-                    price: data.price,
-                    rating: data.rating,
-                    idCardNo: data.idCardNo
-                }).then(async (result) => {
-                    console.log(result, "新增成功")
-                    showPosts();
-                }).catch(error => {
-                    handleError(error)
-                });
+                const data = handleParam();
+                Post.create(data)
+                    .then(async (result) => {
+                        showPosts();
+                    }).catch(error => {
+                        handleError(error)
+                    });
             } catch (error) {
                 handleError(error);
             }
@@ -79,20 +83,23 @@ const requestListener = async (req, res) => {
         showPosts();
     } else if (req.url.startsWith("/posts/") && req.method == "DELETE") {
         const id = getId(req.url);
-        await Post.findByIdAndDelete(id);
-        showPosts();
+        await Post.findByIdAndDelete(id)
+            .then(async (result) => {
+                showPosts();
+            }).catch(error => {
+                handleError(error)
+            });
     } else if (req.url.startsWith("/posts/") && req.method === "PATCH") {
         req.on('end', async () => {
             try {
                 const id = getId(req.url);
-                const data = JSON.parse(body);
-                let newData;
-                [...Object.keys(data)].forEach(field => {
-                    if (["name", "price", "rating", "idCardNo"].indexOf(field) > -1)
-                        newData = { ...newData, [field]: data[field] }
-                })
-                await Post.findByIdAndUpdate(id, newData);
-                showPosts();
+                const data = handleParam();
+                await Post.findByIdAndUpdate(id, data)
+                    .then(async (result) => {
+                        showPosts();
+                    }).catch(error => {
+                        handleError(error)
+                    });
             } catch (error) {
                 handleError(error);
             }
